@@ -1,0 +1,25 @@
+Compare GENERATED_A and GENERATED_B against the REFERENCE and decide which is better.
+
+STRICTNESS: {{ strictness }}
+
+REFERENCE:
+{{ reference }}
+
+GENERATED_A:
+{{ generated_a }}
+
+GENERATED_B:
+{{ generated_b }}
+
+Pick the better description:
+- Prefer semantic and factual alignment to REFERENCE.
+- Penalize unsupported claims and hallucinations.
+- Do not reward verbosity or stylistic similarity.
+
+Return JSON with this schema:
+{
+  "winner": "A|B|tie",
+  "confidence": 0,
+  "reasoning": "1-4 sentences, no chain-of-thought"
+}
+

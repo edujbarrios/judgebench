@@ -1,0 +1,39 @@
+Evaluate the GENERATED description against the REFERENCE description.
+
+STRICTNESS: {{ strictness }}
+
+REFERENCE:
+{{ reference }}
+
+GENERATED:
+{{ generated }}
+
+Score the GENERATED description on these dimensions (0-100):
+- semantic_similarity: meaning overlap (lexical overlap is not required)
+- correctness: factual alignment to REFERENCE (do not infer beyond REFERENCE)
+- completeness: covers the key points present in REFERENCE (do not reward verbosity)
+- hallucination_risk: likelihood GENERATED introduces unsupported details (higher = worse)
+- clarity: readability and lack of confusing wording
+- ambiguity (optional): how ambiguous the GENERATED description is (higher = more ambiguous)
+- consistency (optional): internal consistency of the GENERATED description
+
+Then provide a short justification in "reasoning" (1-4 sentences, no chain-of-thought).
+
+Return JSON with this schema:
+{
+  "semantic_similarity": 0,
+  "correctness": 0,
+  "completeness": 0,
+  "hallucination_risk": 0,
+  "clarity": 0,
+  "ambiguity": 0,
+  "consistency": 0,
+  "reasoning": "...",
+  "final_score": 0
+}
+
+Notes:
+- "final_score" should be a single overall score that reflects your dimension scores.
+- If STRICTNESS is conservative, penalize any uncertain/unsupported claims more strongly.
+- If STRICTNESS is aggressive, tolerate minor wording differences as long as meaning is preserved.
+
