@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "judgebench"
 version = "0.1.0"
-description = "Local-first benchmarking framework for LLM-as-a-judge evaluation workflows."
+description = "Local-first benchmarking for LLM-as-a-judge evaluation: structured scoring and pairwise comparisons from CSV datasets with exportable results and reports."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
