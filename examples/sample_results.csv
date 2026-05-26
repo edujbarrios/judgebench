@@ -1,0 +1,4 @@
+id,reference,generated,semantic_similarity,correctness,completeness,hallucination_risk,clarity,final_score,reasoning
+1,"Small opacity in the left lung base.","Subtle opacity in the lower left lung.",91,90,84,5,88,89,"Both descriptions refer to a subtle left basilar opacity with equivalent meaning."
+2,"No acute cardiopulmonary findings.","There is pneumonia in the right lung.",34,22,40,72,68,31,"The generated description introduces pneumonia, which is unsupported by the reference."
+
