@@ -42,6 +42,18 @@ judgebench = "judgebench.cli.main:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/judgebench"]
+include = ["src/judgebench/prompts/templates/*.j2"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/README.md",
+  "/LICENSE",
+  "/pyproject.toml",
+  "/src/**",
+  "/tests/**",
+  "/examples/**",
+  "/results/**",
+]
 
 [tool.ruff]
 line-length = 100
@@ -54,4 +66,3 @@ ignore = ["E501"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
-

@@ -13,6 +13,16 @@ class MarkdownReport:
     markdown: str
 
 
+def _markdown_table(df: pd.DataFrame, columns: list[str]) -> str:
+    view = df[columns].astype(str).values.tolist()
+    header = "| " + " | ".join(columns) + " |"
+    sep = "| " + " | ".join(["---"] * len(columns)) + " |"
+    lines = [header, sep]
+    for row in view:
+        lines.append("| " + " | ".join(row) + " |")
+    return "\n".join(lines)
+
+
 def generate_markdown_report(df: pd.DataFrame, *, title: str = "JudgeBench Report") -> MarkdownReport:
     summary = summarize_scores(df)
     distro = describe_distribution(df, "final_score")
@@ -43,11 +53,11 @@ def generate_markdown_report(df: pd.DataFrame, *, title: str = "JudgeBench Repor
     md.append("")
     md.append("## Top Examples")
     md.append("")
-    md.append(best[["id", "final_score", "reasoning"]].to_markdown(index=False))
+    md.append(_markdown_table(best, ["id", "final_score", "reasoning"]))
     md.append("")
     md.append("## Lowest Examples")
     md.append("")
-    md.append(worst[["id", "final_score", "reasoning"]].to_markdown(index=False))
+    md.append(_markdown_table(worst, ["id", "final_score", "reasoning"]))
     md.append("")
     return MarkdownReport(markdown="\n".join(md))
 
@@ -57,4 +67,3 @@ def write_markdown_report(df: pd.DataFrame, path: str | Path, *, title: str = "J
     out_path = Path(path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(report.markdown, encoding="utf-8")
-
