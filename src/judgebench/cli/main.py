@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from judgebench.benchmark.runner import run_dataset, run_pairwise_dataset
 from judgebench.config.settings import JudgeBenchSettings
+from judgebench.judge.client import JudgeClientError
 from judgebench.reports.html_report import write_html_report
 from judgebench.reports.markdown_report import write_markdown_report
 
@@ -69,8 +70,21 @@ def run(
 ) -> None:
     """Run evaluation on a CSV dataset and write a results CSV."""
     settings = _settings_with_overrides(api_base_url=api_base_url, api_key=api_key, model=model)
-    if mode == "pairwise":
-        run_pairwise_dataset(
+    try:
+        if mode == "pairwise":
+            run_pairwise_dataset(
+                dataset_csv,
+                output_csv=output,
+                settings=settings,
+                strictness=strictness,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                system_prompt=system_prompt,
+            )
+            typer.echo(f"Wrote pairwise results to {output}")
+            raise typer.Exit(0)
+
+        results = run_dataset(
             dataset_csv,
             output_csv=output,
             settings=settings,
@@ -79,19 +93,10 @@ def run(
             max_tokens=max_tokens,
             system_prompt=system_prompt,
         )
-        typer.echo(f"Wrote pairwise results to {output}")
-        raise typer.Exit(0)
-
-    results = run_dataset(
-        dataset_csv,
-        output_csv=output,
-        settings=settings,
-        strictness=strictness,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        system_prompt=system_prompt,
-    )
-    typer.echo(f"Wrote {len(results)} rows to {output}")
+        typer.echo(f"Wrote {len(results)} rows to {output}")
+    except (ValueError, JudgeClientError) as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(1) from exc
 
 
 @app.command()
@@ -108,16 +113,20 @@ def pairwise(
 ) -> None:
     """Run pairwise comparison on a CSV dataset."""
     settings = _settings_with_overrides(api_base_url=api_base_url, api_key=api_key, model=model)
-    results = run_pairwise_dataset(
-        dataset_csv,
-        output_csv=output,
-        settings=settings,
-        strictness=strictness,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        system_prompt=system_prompt,
-    )
-    typer.echo(f"Wrote {len(results)} rows to {output}")
+    try:
+        results = run_pairwise_dataset(
+            dataset_csv,
+            output_csv=output,
+            settings=settings,
+            strictness=strictness,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            system_prompt=system_prompt,
+        )
+        typer.echo(f"Wrote {len(results)} rows to {output}")
+    except (ValueError, JudgeClientError) as exc:
+        typer.secho(str(exc), fg=typer.colors.RED, err=True)
+        raise typer.Exit(1) from exc
 
 
 @app.command()
