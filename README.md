@@ -1,14 +1,5 @@
 # judgebench
 
-Created by **Eduardo J. Barrios**  
-GitHub: **@edujbarrios**
-
-**GitHub About (description)**  
-“Exploring LLM-as-a-judge methods as alternatives to traditional AI evaluation metrics through benchmarking and semantic evaluation experiments.”
-
-**Tagline**  
-“Researching whether LLM-based judges can provide more human-aligned evaluation signals for generative AI systems than traditional lexical metrics through structured benchmarking workflows.”
-
 ## What This Is
 
 `judgebench` is a **local-first** benchmarking and evaluation framework that investigates whether **LLM-as-a-judge** methods can better approximate **semantic equivalence** and **human-aligned evaluation signals** for free-text generation than traditional deterministic lexical metrics.
