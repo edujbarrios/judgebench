@@ -14,9 +14,16 @@ from judgebench.judge.client import JudgeClientError
 from judgebench.reports.html_report import write_html_report
 from judgebench.reports.markdown_report import write_markdown_report
 
+GITHUB_ABOUT_DESCRIPTION = (
+    "Local-first benchmarking for LLM-as-a-judge evaluation: structured scoring and "
+    "pairwise comparisons from CSV datasets with exportable results and reports."
+)
+
+TAGLINE = "Semantic evaluation with an LLM judge (CSV-in/CSV-out; standard + pairwise)."
+
 app = typer.Typer(
     name="judgebench",
-    help="Local-first benchmarking for LLM-as-a-judge evaluation workflows.",
+    help=TAGLINE,
     no_args_is_help=True,
 )
 
@@ -32,6 +39,29 @@ def version() -> None:
     from importlib.metadata import version as _version
 
     typer.echo(_version("judgebench"))
+
+
+@app.command()
+def about() -> None:
+    """Print GitHub About text plus a workflow overview."""
+    typer.echo("GitHub About (description)")
+    typer.echo(GITHUB_ABOUT_DESCRIPTION)
+    typer.echo("")
+    typer.echo("Tagline")
+    typer.echo(TAGLINE)
+    typer.echo("")
+    typer.echo("Objective")
+    typer.echo(
+        "Provide structured, human-aligned evaluation signals for free-text generation using an "
+        "LLM judge (scoring and pairwise preference)."
+    )
+    typer.echo("")
+    typer.echo("How it works")
+    typer.echo("1) Prepare a CSV dataset:")
+    typer.echo("   - Standard: id,reference,generated")
+    typer.echo("   - Pairwise: id,reference,generated_a,generated_b")
+    typer.echo("2) Run the judge to produce a results CSV: judgebench run|pairwise <dataset.csv> -o <results.csv>")
+    typer.echo("3) (Optional) Generate a report: judgebench report <results.csv> -o <report.md|report.html>")
 
 
 def _settings_with_overrides(
